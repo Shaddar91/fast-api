@@ -25,7 +25,5 @@ jobs:
           BRANCH_NAME: ${{ github.ref_name }} 
         run: |
           echo "Building image $DOCKER_REGISTRY"
-          docker build -t $DOCKER_USER_NAME/$DOCKER_REGISTRY:latest .
-          docker push $DOCKER_USER_NAME/$DOCKER_REGISTRY:latest
           docker build -t $DOCKER_USER_NAME/$DOCKER_REGISTRY:$BRANCH_NAME .
           docker push $DOCKER_USER_NAME/$DOCKER_REGISTRY:$BRANCH_NAME
