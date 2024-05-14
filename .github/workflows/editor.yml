@@ -26,5 +26,7 @@ jobs:
           USER: ${{ secrets.DOCKER_USER_NAME }}
         run: |
           echo "Building image $REPOSITORY"
+          docker build -t $USER/$REPOSITORY:latest .
+          docker push $USER/$REPOSITORY:latest
           docker build -t $USER/$REPOSITORY:$BRANCH_NAME .
           docker push $USER/$REPOSITORY:$BRANCH_NAME
