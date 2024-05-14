@@ -1,0 +1,31 @@
+name: fast-api
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        id: checkout
+      - name: Login to Docker Hub
+        id: login-docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER_NAME }}
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Build, tag, and push docker image to Docker Hub
+        env:
+          REPOSITORY: ${{ secrets.APP_NAME }} 
+          BRANCH_NAME: ${{ github.ref_name }} 
+        run: |
+          echo "Building image $DOCKER_REGISTRY"
+          docker build -t $DOCKER_USER_NAME/$DOCKER_REGISTRY:latest .
+          docker push $DOCKER_USER_NAME/$DOCKER_REGISTRY:latest
+          docker tag $DOCKER_USER_NAME/$DOCKER_REGISTRY:latest $DOCKER_USER_NAME/$DOCKER_REGISTRY:$BRANCH_NAME
+          docker push $DOCKER_USER_NAME/$DOCKER_REGISTRY:$BRANCH_NAME
